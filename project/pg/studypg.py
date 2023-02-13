@@ -25,7 +25,7 @@ def studypg(expID, uID, uName):
             st.write(
                 '脱镁叶绿酸(Pheophorbide)是由叶绿素分子脱去镁离子后进一步水解而形成的化合物，具有显著的抗炎、抗肿瘤、保护胃肠粘膜等药理作用。\n中药蚕砂在乙醇、丙酮等有机溶剂的萃取下获得叶绿素粗品，然后在酸性条件下脱去植醇长链和金属离子，得到主要产物脱镁叶绿酸 a，再对产物进行盐酸乙醚转溶、真空干燥得到纯度很高的脱镁叶绿酸。')
             st.image('https://raw.githubusercontent.com/TsukJ/stapp/main/project/pg/studydata/exp0/img0.png')
-            st.image('/project/pg/studydata/exp0/img0.png')
+            st.image('./project/pg/studydata/exp0/img0.png')
             st.write(
                 '脱镁叶绿酸具有特殊的荧光特性，即在一定波长光激发下可发射特定波长的荧光，可用于鉴别和含量分析。其在一定波长光激发下可产生单线态氧，破坏肿瘤细胞，因而是一种良好的光敏剂，可用于光动力治疗。')
             st.header('实验步骤')
