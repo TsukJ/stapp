@@ -13,7 +13,7 @@ class MultiPage:
             }
         )
     
-    def add_experiment(self, title, id):
+    def add_experiment(self, title, id:int):
         self.experiments.append(
             {
                 'title':title,
