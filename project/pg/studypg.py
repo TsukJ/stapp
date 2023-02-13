@@ -28,7 +28,7 @@ def studypg(expID, uID, uName):
                 os.path.exists('pg/studydata/exp0/img0.png')
             except :
                 print ('No')
-            st.image('pg/studydata/exp0/img0.png')
+            st.image('./studydata/exp0/img0.png')
             st.write(
                 '脱镁叶绿酸具有特殊的荧光特性，即在一定波长光激发下可发射特定波长的荧光，可用于鉴别和含量分析。其在一定波长光激发下可产生单线态氧，破坏肿瘤细胞，因而是一种良好的光敏剂，可用于光动力治疗。')
             st.header('实验步骤')
