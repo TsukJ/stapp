@@ -11,9 +11,12 @@ def studypg(expID, uID, uName):
             st.session_state['sTime'] = time.time()
         if st.button('学习结束'):
             st.session_state['eTime'] = time.time()
-            allTime =int(st.session_state.eTime - st.session_state.sTime)
-            st.subheader('您学习了')
-            st.subheader(str(allTime) + 's')
+            try:
+                allTime =int(st.session_state.eTime - st.session_state.sTime)
+                st.subheader('您学习了')
+                st.subheader(str(allTime) + 's')
+            except:
+                st.subheader('尚未点击开始学习')
 
     if expID == 0:
         with colLeft:
