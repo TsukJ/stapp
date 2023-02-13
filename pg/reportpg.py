@@ -6,7 +6,7 @@ def reportpg(expID, uID, uName):
     if expID == 0:
         with st.container():
             st.header('样品含量测定')
-            y = st.number_input(label='样品吸光度', value=1.000,format='.5f')
+            y = st.number_input(label='样品吸光度', value=1.000,step=0.00001)
             st.text_input(label='样品含量mg/L', value=(y - 0.0025)/0.0275)
             st.header('单线态氧含量测定')
             with st.container():
