@@ -1,75 +1,109 @@
 import streamlit as st
 import pandas as pd
+import math
+import numpy as np
 from tools import mathtools
 
-def reportpg(expID, uID, uName):
-    if expID == 0:
-        with st.container():
+
+def DataInput(series_num: int, data_num: int, data_name: str, init_data=None):
+    if data_num <= 6:
+        col_args = st.columns(data_num)
+    else:
+        col_args = st.columns(6)
+    data_args = []
+    for i in range(data_num):
+        row_num = i % 6
+        with col_args[row_num]:
+            if init_data is not None and i < len(init_data):
+                value = str(init_data[i])
+            else:
+                value = 0
+            data = st.text_input(label=data_name + str(i + 1), key=str(series_num) + data_name + str(i + 1),
+                                 value=value)
+            data_args.append(eval(data))
+    return data_args
+
+
+def LineChart(argx, argy, result):
+    a1 = format(result[0], '.3f')
+    b1 = format(result[1], '.3f')
+    argsy1a = mathtools.Linedata(argx, result[0], result[1])
+    st.markdown("拟合方程为：:green[$" + 'y = ' + a1 + '+' + b1 + 'x' + "$]")
+    st.markdown('相关系数为：:green[' + str(result[2]) + ']')
+    dic1 = {
+        '原始数据': argy,
+        '拟合曲线': argsy1a
+    }
+    dt1 = pd.DataFrame(dic1, index=argx)
+    st.line_chart(dt1)
+
+
+class Page:
+    def __init__(self, exp_id):
+        self.exp_id = exp_id
+
+    def run(self):
+        if self.exp_id == 0:
             st.header('样品含量测定')
-            y = st.number_input(label='样品吸光度', value=1.000)
-            st.text_input(label='样品含量mg/L', value=(y - 0.0025)/0.0275)
+            y = st.number_input(label='样品吸光度', value=1)
+            st.caption('样品含量mg/L ：:blue[' + str((y - 0.0025) / 0.0275) + ']')
             st.header('单线态氧含量测定')
-            with st.container():
-                st.subheader('标准曲线')
-                st.write('浓度单位 10^-5 mol/L')
-                col1, col2, col3, col4, col5,col6 = st.columns([1,1,1,1,1,1])
-                with col1:
-                    c1 = st.number_input(label='浓度1', value=1.25)
-                    A1 = st.number_input('吸光度1')
-                with col2:
-                    c2 = st.number_input(label='浓度2', value=2.5)
-                    A2 = st.number_input('吸光度2')
-                with col3:
-                    c3 = st.number_input(label='浓度3', value=5)
-                    A3 = st.number_input('吸光度3')
-                with col4:
-                    c4 = st.number_input(label='浓度4', value=10)
-                    A4 = st.number_input('吸光度4')
-                with col5:
-                    c5 = st.number_input(label='浓度5', value=20)
-                    A5 = st.number_input('吸光度5')
-                with col6:
-                    c6 = st.number_input(label='浓度6', value=40)
-                    A6 = st.number_input('吸光度6')
-            argsx1 = [c1, c2, c3, c4, c5, c6]
-            argsy1 = [A1, A2, A3, A4, A5, A6]
+            st.subheader('标准曲线')
+            st.write('浓度单位 10^-5 mol/L')
+            col_num1 = math.floor(st.number_input('数据量', value=6, key='数据量1', min_value=1))
+            data_arg = [1.25, 2.5, 5, 10, 20, 40]
+            argsx1 = DataInput(0, col_num1, '浓度', data_arg)
+            argsy1 = DataInput(0, col_num1, '吸光度')
             result1 = mathtools.Lineindex(argsx1, argsy1)
-            a1 = format(result1[0], '.3f')
-            b1 = format(result1[1], '.3f')
-            argsy1a = mathtools.Linedata(argsx1,result1[0],result1[1])
-            st.write('拟合方程为')
-            st.write('y = '+a1+'+'+b1+'x')
-            dic1 = {
-                '原始数据' : argsy1,
-                '拟合曲线' : argsy1a
-            }
-            dt1 = pd.DataFrame(dic1,index=argsx1)
-            st.line_chart(dt1)
+            LineChart(argsx1, argsy1, result1)
             st.subheader('样品曲线')
             st.write('时间单位 min')
-            col1a, col2a, col3a, col4a, col5a, col6a = st.columns([1, 1, 1, 1, 1, 1])
-            with col1a:
-                t1 = st.number_input(label='时间1', value=10)
-                A1a = st.number_input('吸光度1',key='1a')
-            with col2a:
-                t2 = st.number_input(label='时间2', value=20)
-                A2a = st.number_input('吸光度2',key='2a')
-            with col3a:
-                t3 = st.number_input(label='时间3', value=30)
-                A3a = st.number_input('吸光度3',key='3a')
-            with col4a:
-                t4 = st.number_input(label='时间4', value=40)
-                A4a = st.number_input('吸光度4',key='4a')
-            with col5a:
-                t5 = st.number_input(label='时间5', value=50)
-                A5a = st.number_input('吸光度5',key='5a')
-            with col6a:
-                t6 = st.number_input(label='时间6', value=60)
-                A6a = st.number_input('吸光度6',key='6a')
-            argsx2 = [t1, t2, t3, t4, t5, t6]
-            argsy2 = [A1a, A2a, A3a, A4a, A5a, A6a]
+            col_num2 = math.floor(st.number_input('数据量', value=6, key='数据量2', min_value=1))
+            argsx2 = DataInput(1, col_num2, '时间', [10, 20, 30, 40, 50, 60])
+            argsy2 = DataInput(1, col_num2, '吸光度')
             dic2 = {
                 '原始数据': argsy2
             }
             dt2 = pd.DataFrame(dic2, index=argsx2)
             st.line_chart(dt2)
+
+        elif self.exp_id == 2:
+            st.header('内标法')
+            st.header('相对校正因子测定')
+            col_args1 = st.columns(2)
+            with col_args1[0]:
+                Wi = eval(st.text_input('氯霉素重量', 0))
+                hi0 = eval(st.text_input('氯霉素的峰面积（峰高）', 0))
+            with col_args1[1]:
+                Wn = eval(st.text_input('对硝基苯酚的重量', 0))
+                hn0 = eval(st.text_input('对硝基苯酚的峰面积（峰高）', 0))
+            if Wn and hn0 and hi0 != 0:
+                fn = (Wi / hi0) / (Wn / hn0)
+            else:
+                fn = None
+            st.markdown('相对校正因子为：:green[' + str(fn) + ']')
+            st.header('样品含量测定')
+            col_args2 = st.columns(2)
+            with col_args2[0]:
+                hi1 = eval(st.text_input('氯霉素的峰高', 0))
+            with col_args2[1]:
+                hn1 = eval(st.text_input('样品的峰面积（峰高）', 0))
+                wn1 = eval(st.text_input('样品的重量', 0))
+            if fn is not None and hn1 * wn1 != 0:
+                han_liang = hi1 * Wn * fn / (hn1 * wn1)
+            else:
+                han_liang = None
+            st.markdown('百分含量为：:green[' + str(han_liang) + ']')
+            st.header('外标法')
+            st.header('标准曲线')
+            argsx1 = DataInput(0, 5, '浓度')
+            argsy1 = DataInput(0, 5, '峰高')
+            result1 = mathtools.Lineindex(argsx1, argsy1)
+            LineChart(argsx1, argsy1, result1)
+            st.header('样品测定')
+            yang_pin = eval(st.text_input('样品的峰面积（峰高）（外）', 0))
+            c0 = result1[0] + yang_pin * result1[2]
+            st.markdown('浓度为：:green[' + str(c0) + ']')
+
+        else:
+            st.header('本节无数据处理')
