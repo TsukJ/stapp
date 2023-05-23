@@ -1,4 +1,4 @@
-from pg import studypg, exampg, reportpg, homepg
+from pg import studypg, exampg, reportpg, homepg, simulatepg
 from pg.studydata import study_develop, exam_develop
 
 exp_list = [
@@ -16,6 +16,6 @@ exp_list = [
     '实验十一  软膏剂的制备及质量监控',
     '实验十二  微囊的制备及质量监控',
 ]
-page_list = {'主页': homepg, '学习': studypg, '测试': exampg, '数据处理': reportpg}
+page_list = {'主页': homepg, '学习': studypg, '测试': exampg, '实验模拟': simulatepg, '数据处理': reportpg}
 page_list_dev = {'开发：学习': study_develop, '开发：测试': exam_develop}
 exp_file_list = ['exp0']
